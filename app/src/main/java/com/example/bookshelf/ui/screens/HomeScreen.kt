@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.bookshelf.R
+import com.example.bookshelf.model.BookDetails
 
 @Composable
 fun HomeScreen(
@@ -86,7 +87,7 @@ fun HomeScreen(
 @Composable
 fun AppScreen(
     modifier: Modifier = Modifier,
-    books: List<String> = listOf(),
+    books: List<BookDetails> = listOf(),
     errorNotFound: Boolean = false,
     errorNetwork: Boolean = false,
     success: Boolean = false,
@@ -155,9 +156,9 @@ fun AppScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(books) { thumbUrl ->
+                    items(books) { book ->
                         BookPhotoCard(
-                            thumbUrl = thumbUrl,
+                            thumbUrl = book.thumbUrl,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(0.6f)

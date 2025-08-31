@@ -13,29 +13,29 @@ data class BookItem(
 //    val etag: String?,
 //    val selfLink: String?,
     val volumeInfo: VolumeInfo?,
-//    val saleInfo: SaleInfo?,
+    val saleInfo: SaleInfo?,
 //    val accessInfo: AccessInfo?,
 //    val searchInfo: SearchInfo?
 )
 
 data class VolumeInfo(
-//    val title: String?,
+    val title: String?,
 //    val subtitle: String?,
-//    val authors: List<String>?,
-//    val publisher: String?,
-//    val publishedDate: String?,
-//    val description: String?,
+    val authors: List<String>?,
+    val publisher: String?,
+    val publishedDate: String?,
+    val description: String?,
 //    val industryIdentifiers: List<IndustryIdentifier>?,
 //    val readingModes: ReadingModes?,
-//    val pageCount: Int?,
+    val pageCount: Int?,
 //    val printType: String?,
 //    val categories: List<String>?,
-//    val maturityRating: String?,
+    val maturityRating: String?,
 //    val allowAnonLogging: Boolean?,
 //    val contentVersion: String?,
 //    val panelizationSummary: PanelizationSummary?,
     val imageLinks: ImageLinks?,
-//    val language: String?,
+    val language: String?,
 //    val previewLink: String?,
 //    val infoLink: String?,
 //    val canonicalVolumeLink: String?
@@ -67,22 +67,22 @@ data class ImageLinks(
     val extraLarge: String?
 )
 
-//data class SaleInfo(
+data class SaleInfo(
 //    val country: String?,
 //    val saleability: String?,
 //    val isEbook: Boolean?,
 //    val listPrice: Price?,
 //    val retailPrice: Price?,
-//    val buyLink: String?,
+    val buyLink: String?,
 //    val offers: List<Offer>?
-//)
-//
+)
+
 //data class Price(
 //    val amount: Double?,
 //    val currencyCode: String?,
 //    val amountInMicros: Long? = null // appears only inside offers
 //)
-//
+
 //data class Offer(
 //    val finskyOfferType: Int?,
 //    val listPrice: Price?,

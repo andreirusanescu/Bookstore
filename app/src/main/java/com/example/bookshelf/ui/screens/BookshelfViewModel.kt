@@ -16,13 +16,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.bookshelf.BookshelfApplication
 import com.example.bookshelf.data.BookshelfRepository
+import com.example.bookshelf.model.BookDetails
 import com.example.bookshelf.model.BookItem
 import com.example.bookshelf.model.BooksResponse
 import kotlinx.coroutines.launch
 import okio.IOException
 
 sealed interface BookShelfUiState {
-    data class Success(val books: List<String>) : BookShelfUiState
+    data class Success(val books: List<BookDetails>) : BookShelfUiState
     object ErrorNetwork : BookShelfUiState
     object ErrorNotFound: BookShelfUiState
     object Loading : BookShelfUiState
@@ -46,23 +47,42 @@ class BookshelfViewModel(
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun getBooks(userInput: String) {
         viewModelScope.launch {
-            val thumbnails = mutableListOf<String>()
+
+            val booksDetails = mutableListOf<BookDetails>()
+
             bookshelfUiState = BookShelfUiState.Loading
             bookshelfUiState = try {
                 val booksResponse = bookshelfRepository.getBooks(userInput)
-
                 booksResponse.items?.forEach { item ->
                     val id = item.id
                     if (id != null) {
                         val bookDetails = bookshelfRepository.getBookById(id)
-                        val thumbnail = bookDetails.volumeInfo?.imageLinks?.thumbnail?.replace("http", "https")
+                        val volumeInfo = bookDetails.volumeInfo
+                        val thumbnail = volumeInfo?.imageLinks?.thumbnail?.replace("http", "https")
                         if (thumbnail != null) {
-                            thumbnails.add(thumbnail)
+                            val title = volumeInfo.title ?: "Unknown"
+                            val authors = volumeInfo.authors ?: listOf("Unknown")
+                            val publisher = volumeInfo.publisher ?: "Unknown"
+                            val publishedDate = volumeInfo.publishedDate ?: "Unknown"
+                            val description = volumeInfo.description ?: "Unknown"
+                            val pageCount = volumeInfo.pageCount.toString()
+                            val maturityRating = volumeInfo.maturityRating ?: "Unknown"
+                            val language: String = volumeInfo.language ?: "Unknown"
+                            val buyLink: String = bookDetails.saleInfo?.buyLink ?: "Unknown"
+
+                            val bookElem = BookDetails(
+                                thumbUrl = thumbnail,
+                                title, authors, publisher,
+                                publishedDate, description,
+                                pageCount, maturityRating,
+                                language, buyLink
+                            )
+                            booksDetails.add(bookElem)
                         }
                     }
                 }
-                if (!thumbnails.isEmpty()) {
-                    BookShelfUiState.Success(thumbnails)
+                if (!booksDetails.isEmpty()) {
+                    BookShelfUiState.Success(booksDetails)
                 } else {
                     BookShelfUiState.ErrorNotFound
                 }
